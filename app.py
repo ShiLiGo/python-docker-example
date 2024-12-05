@@ -1,8 +1,14 @@
-from fastapi import FastAPI
+import web
 
-app = FastAPI()
+urls = ("/", "test")
 
+app = web.application(urls, globals(), autoreload=False)
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+class test:
+    def GET(self):
+        return "Hello World"
+
+if __name__ == "__main__":
+    app.run()
+else:
+    application = app.wsgifunc()
