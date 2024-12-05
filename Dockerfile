@@ -54,6 +54,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 RUN --mount=type=bind,source=uwsgi-2.0.18-8.el7.x86_64.rpm,target=uwsgi-2.0.18-8.el7.x86_64.rpm \
     yum localinstall -y uwsgi-2.0.18-8.el7.x86_64.rpm
+RUN yum install -y epel-release
+RUN --mount=type=bind,source=nginx-1.20.1-10.el7.x86_64.rpm,target=nginx-1.20.1-10.el7.x86_64.rpm \
+    yum install -y nginx-1.20.1-10.el7.x86_64.rpm
 
 # Switch to the non-privileged user to run the application.
 USER appuser
