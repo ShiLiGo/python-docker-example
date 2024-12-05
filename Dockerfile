@@ -35,6 +35,7 @@ RUN passwd -d appuser
 # into this layer.
 RUN --mount=type=bind,source=Centos-7.repo,target=Centos-7.repo \
     cp Centos-7.repo /etc/yum.repos.d/CentOS-Base.repo
+RUN yum install -y epel-release
 RUN yum install -y python-devel mysql-devel gcc
 RUN --mount=type=cache,target=/root/.cache/pip \
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
@@ -47,25 +48,35 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     # TODO: Install any other dependencies.
 RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    virtualenv -p python /root/.cache/venv  && \
-    . /root/.cache/venv/bin/activate && \
+    virtualenv -p python /app/venv  && \
+    . /app/venv/bin/activate && \
     pip install --upgrade setuptools==44.1.1 && \
     pip install --upgrade wheel && \
     python -m pip install -r requirements.txt
 RUN --mount=type=bind,source=uwsgi-2.0.18-8.el7.x86_64.rpm,target=uwsgi-2.0.18-8.el7.x86_64.rpm \
     yum localinstall -y uwsgi-2.0.18-8.el7.x86_64.rpm
-RUN yum install -y epel-release
 RUN --mount=type=bind,source=nginx-1.20.1-10.el7.x86_64.rpm,target=nginx-1.20.1-10.el7.x86_64.rpm \
     yum install -y nginx-1.20.1-10.el7.x86_64.rpm
+RUN yum install -y uwsgi-plugin-python
 
 # Switch to the non-privileged user to run the application.
-USER appuser
+# USER appuser
+USER root
 
 # Copy the source code into the container.
 COPY . .
+RUN cp uwsgi.ini /etc/uwsgi.ini
+RUN mkdir -p /run/uwsgi && chmod 777 /run/uwsgi && chown uwsgi:uwsgi /run/uwsgi
+RUN cd /var/log && mkdir -p /var/log/uwsgi && chmod 777 /var/log/uwsgi
+RUN cp pingtai-sdk.conf /etc/nginx/conf.d/pingtai-sdk.conf
+RUN cp pingtai-sdk.ini /etc/uwsgi.d/pingtai-sdk.ini
+# RUN cp enc_req_resp.js /etc/nginx/enc_req_resp.js
+RUN cp enc_import.conf /etc/nginx/enc_import.conf
+RUN cp enc_location.conf /etc/nginx/enc_location.conf
+RUN cp nginx.conf /etc/nginx/nginx.conf
 
 # Expose the port that the application listens on.
 EXPOSE 9005
 
 # Run the application.
-CMD  python app.py 9005
+CMD sh start-service.sh
