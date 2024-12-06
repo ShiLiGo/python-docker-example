@@ -38,9 +38,12 @@ app = web.application(urls, globals(), autoreload=False)
 class test:
     def GET(self):
         try:
-            ursc.incr("testincr", 1)
-            t = ursc.get("testincr")
+            # ursc.incr("testincr", 1)
+            t = ursc.hgetall("BHGJ_UI_70622")
             print 'test, t', t
+            ursc.hset("BHGJ_UI_70622", "IDType", "12")
+            t = ursc.hgetall("BHGJ_UI_70622")
+            print 'test, modify t', t
             user = udb.query("select * from purchaseblacklist where content = '70622'")
             if not user:
                 udb.query("insert into purchaseblacklist(id, type, content, gameid, createtime) values(NULL, 5, '70622', 3, NOW())")

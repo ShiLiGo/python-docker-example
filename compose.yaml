@@ -32,6 +32,8 @@ services:
     image: cimg/redis:5.0
     ports:
       - 6379:6379
+    volumes:
+      - /Users/lishi/Downloads/1252509288_redis_100004330_data_2024-12-06_1639556253217785284-14431654-redis-server-ignore-100004330-ignore-1-ignore.rdb:/home/circleci/project/dump.rdb
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
