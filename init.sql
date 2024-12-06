@@ -1,0 +1,2 @@
+GRANT ALL ON duole.* TO 'duoletest'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

@@ -7,7 +7,7 @@ USERDB_HOST = "db"
 USERDB_PORT = 3306
 USERDB_USER = "root"
 USERDB_PASS = ""
-USERDB_DATABASE = "duole"
+USERDB_DATABASE = "mysql"
 
 udb = web.database(
     dbn = "mysql",
@@ -41,8 +41,9 @@ class test:
             ursc.incr("testincr", 1)
             t = ursc.get("testincr")
             print 'test, t', t
-            user = udb.query("select * from user where id = 70622")
-            print(user)
+            user = udb.query("select * from user")
+            for r in user:
+                print r
         except Exception as e:
             print(e)
             return "query exception"
