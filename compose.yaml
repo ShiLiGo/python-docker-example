@@ -9,10 +9,21 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
+    image: python-docker-example:latest
     build:
       context: .
     ports:
       - 9005:9005
+    depends_on: 
+      - db
+  db:
+    image: circleci/mysql:5.7.36
+    ports:
+      - 3306:3306
+  redis:
+    image: cimg/redis:5.0
+    ports:
+      - 6379:6379
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
