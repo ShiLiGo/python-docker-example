@@ -18,14 +18,14 @@ services:
       - db
   db:
     image: circleci/mysql:5.7.36
-    # environment:
-      # MYSQL_ROOT_PASSWORD: 123456
-      # MYSQL_USER: duoletest
-      # MYSQL_PASSWORD: 123456
-      # MYSQL_DATABASE: duole
-    # volumes:
-    #   - /Users/lishi/Desktop/duole.sql.gz:/docker-entrypoint-initdb.d/duole.sql.gz
-    #   - /Users/lishi/dockertest/python-docker-example/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: duoletest
+      MYSQL_PASSWORD: 123456
+      MYSQL_DATABASE: duole
+    volumes:
+      - /Users/lishi/Desktop/duole.sql.gz:/docker-entrypoint-initdb.d/duole.sql.gz
+      - /Users/lishi/dockertest/python-docker-example/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 3306:3306
   redis:
