@@ -16,6 +16,11 @@ services:
       - 9005:9005
     depends_on: 
       - db
+    develop:
+      watch:
+        - path: ./app/duole_usdk_server
+          target: /var/www/apps/duole
+          action: sync+restart
   db:
     image: circleci/mysql:5.7.36
     environment:
@@ -33,7 +38,9 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - /Users/lishi/Downloads/1252509288_redis_100004330_data_2024-12-06_1639556253217785284-14431654-redis-server-ignore-100004330-ignore-1-ignore.rdb:/home/circleci/project/dump.rdb
+      - redis-data:/home/circleci/project
+volumes:
+  redis-data: 
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to

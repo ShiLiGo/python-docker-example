@@ -74,6 +74,11 @@ RUN cp pingtai-sdk.ini /etc/uwsgi.d/pingtai-sdk.ini
 RUN cp enc_import.conf /etc/nginx/enc_import.conf
 RUN cp enc_location.conf /etc/nginx/enc_location.conf
 RUN cp nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /var/www && chmod 777 /var/www
+RUN mkdir -p /var/www/apps && chmod 777 /var/www/apps
+RUN mkdir -p /var/www/apps/duole && chmod 777 /var/www/apps/duole
+RUN mkdir -p /var/www/apps/duole/log && chmod 777 /var/www/apps/duole/log
+RUN cp -r app/duole_usdk_server/* /var/www/apps/duole
 
 # Expose the port that the application listens on.
 EXPOSE 9005
